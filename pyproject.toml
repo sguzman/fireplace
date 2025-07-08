@@ -1,0 +1,48 @@
+[project]
+name = "fireplace"
+version = "0.1.0"
+description = "A Python card game simulator"
+readme = "README.md"
+requires-python = ">=3.8,<3.12"  # block 3.12 until typing generics are fixed
+authors = [
+  { name = "Jerome Leclanche", email = "jerome@hearthsim.info" },  # original Fireplace author
+]
+dependencies = [
+  "requests",
+  "numpy",
+  "hearthstone>=9.17.0",
+  "hearthstone-data>=223542.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4.1",
+  "black>=25.1.0",
+  "mypy>=1.16.1",
+  "setuptools>=75.3.2",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.rye]
+managed = true
+dev-dependencies = ["pytest>=8.4.1", "black>=25.1.0", "mypy>=1.16.1", "setuptools>=75.3.2"]
+
+[tool.rye.scripts]
+lint = "black fireplace tests"
+test = "pytest"
+typecheck = "mypy fireplace"
+
+[tool.rye.metadata]
+# ⚠️ Internal note:
+# Python 3.12 breaks generic built-in usage: e.g. `class CardList(list[T])`
+# To support 3.12+, change to:
+#   from typing import Generic
+#   class CardList(list[T], Generic[T]):
+# You may then update `requires-python` accordingly to `<3.13`
+
+# ⚠️ Setting `<3.12` until modern typing support is in place.
+# Consider CI actions across 3.8–3.11 to ensure compatibility.
+
